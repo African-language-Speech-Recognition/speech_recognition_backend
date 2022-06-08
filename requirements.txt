@@ -1,1 +1,5 @@
 fastapi~=0.78.0
+tensorflow~=2.9.1
+librosa~=0.9.1
+pandas~=1.4.2
+jiwer~=2.3.0
