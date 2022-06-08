@@ -4,6 +4,8 @@ from scripts.helper_functions import read_obj, extract_audio
 from scripts.models import build_model, cnn_net, bi_directional_rnn, preprocess_model
 from scripts.predict import predict
 import pandas as pd
+from pydub import AudioSegment
+import librosa
 
 # load files
 meta_data = pd.read_csv("./data/meta_data.csv")
@@ -61,16 +63,23 @@ async def get_type(file: UploadFile):
 
 @app.post('/predict')
 async def predict_audio(file: UploadFile):
-    # load data from request
-    audio_file = file.file
+    if file.content_type == 'audio/wave':
+        # load data from request
+        audio_file = file.file
 
-    # preprocess audio
-    extracted_audio = extract_audio(audio_file)
+        # preprocess audio
+        extracted_audio = extract_audio(audio_file)
 
-    # predict
-    predicted, error = predict(cnn_bi_rnn_model, extracted_audio[0],
-                               tokenizer, int_to_char, actual=None)
-    # build response
-    return {
-        "predicted": predicted
-    }
+        # predict
+        predicted, error = predict(cnn_bi_rnn_model, extracted_audio[0],
+                                   tokenizer, int_to_char, actual=None)
+        # build response
+        return {
+            "predicted": predicted
+        }
+
+    else:
+        return {
+            'Status': False,
+            'Message': 'Unsupported file type'
+        }
