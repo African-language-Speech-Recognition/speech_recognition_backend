@@ -1,17 +1,19 @@
 from fastapi import FastAPI, UploadFile
-from scripts.tokenizer import Tokenizer
-from scripts.helper_functions import read_obj, extract_audio
-from scripts.models import build_model, cnn_net, bi_directional_rnn, preprocess_model
-from scripts.predict import predict
+import os
+import sys
+
+# sys.path.append(os.path.abspath(os.path.join('./scripts')))
+from .scripts.tokenizer import Tokenizer
+from .scripts.helper_functions import read_obj, extract_audio
+from .scripts.models import build_model, cnn_net, bi_directional_rnn, preprocess_model
+from .scripts.predict import predict
 import pandas as pd
-from pydub import AudioSegment
-import librosa
 
 # load files
-meta_data = pd.read_csv("./data/meta_data.csv")
+meta_data = pd.read_csv("app/data/meta_data.csv")
 sorted_metadata = meta_data.sort_values(by="duration")
 labels = sorted_metadata['label'].to_list()
-translation_obj = read_obj("./data/translation_dict.pkl")
+translation_obj = read_obj("app/data/translation_dict.pkl")
 
 # load translation
 translations = []
@@ -41,7 +43,7 @@ preprocess_model = preprocess_model(sample_rate, fft_size, frame_step, n_mels)
 cnn_bi_rnn_model = build_model(output_dim, cnn_model, bi_rnn, preprocess_model)
 
 # load saved model
-cnn_bi_rnn_model.load_weights("./models/cnn-bi-rnn.h5")
+cnn_bi_rnn_model.load_weights("app/models/cnn-bi-rnn.h5")
 
 app = FastAPI()
 
