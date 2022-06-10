@@ -1,6 +1,4 @@
 from fastapi import FastAPI, UploadFile
-import os
-import sys
 
 # sys.path.append(os.path.abspath(os.path.join('./scripts')))
 from scripts.tokenizer import Tokenizer
@@ -10,10 +8,10 @@ from scripts.predict import predict
 import pandas as pd
 
 # load files
-meta_data = pd.read_csv("./data/meta_data.csv")
+meta_data = pd.read_csv("data/meta_data.csv")
 sorted_metadata = meta_data.sort_values(by="duration")
 labels = sorted_metadata['label'].to_list()
-translation_obj = read_obj("./data/translation_dict.pkl")
+translation_obj = read_obj("data/translation_dict.pkl")
 
 # load translation
 translations = []
