@@ -3,3 +3,4 @@ jiwer==2.3.0
 librosa==0.9.1
 pandas==1.4.2
 tensorflow-cpu==2.9.1
+gunicorn==20.1.0
